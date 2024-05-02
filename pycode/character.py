@@ -1,28 +1,31 @@
 import random, time
 from getpass import getpass
 
-standard_1 = {
-    "STR": 5,
-    "DEF": 6,
-    "MGK": 0.001,
-    "SPD": 0.2,
-    "LCK": 0.02
-}
+def get_stat_dict(STR, DEF, LCK, SPD, VIT):
+    return {
+        "STR": STR,
+        "DEF": DEF,
+        "LCK": LCK,
+        "SPD": SPD,
+        "VIT": VIT
+    }
 
 
 class Character:
-    def __init__(self):
-        self.stats = {
-            "STR": 0,
-            "DEF": 0,
-            "MGK": 0,
-            "SPD": 0,
-            "VIT": 100
-        }
-        self.points = 100
-        self.set_name()
-        self.set_stats()
-
+    def __init__(self, name = "", stats = {}):
+        if len(stats) == 0:
+            self.stats = get_stat_dict(0, 0, 0, 0, 100)
+        else:
+            self.stats = stats
+        
+        if name == "":
+            self.points = 100
+            self.set_name()
+            self.set_stats()
+        else:
+            self.name = name
+            self.points = 0
+    
     def set_name(self):
         print("What would you like your name to be?")
         self.name = input("> ")
@@ -57,6 +60,16 @@ class Character:
         print("LCK: " + str(self.stats["LCK"]))
         print("SPD: " + str(self.stats["SPD"]))
         print("VIT: " + str(self.stats["VIT"]))
+
+    def attack(self, target):
+        damage = self.stats["STR"] - target.stats["DEF"]
+
+        if damage > 0:
+            target.stats["VIT"] -= damage
+            return damage
+        else:
+            target.stats["VIT"] -= 1
+            return 1
 
 
 
